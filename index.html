@@ -122,7 +122,7 @@ function render() {
   }
   L.innerHTML = items.map(function(t) {
     var m = mg(t.mood||[]);
-    return '<div class="c" onclick="openSheet(''+t.slug+'')">'
+    return '<div class="c" onclick="openSheet(\''+t.slug+'\')">'
       + '<div class="c-r1"><span class="c-n">'+t.name+'</span><span class="c-b">'+t.slide_count+' slides</span></div>'
       + '<div class="c-t">'+(t.tagline||'').substring(0,100)+'</div>'
       + '<div class="c-tags">'
@@ -149,7 +149,7 @@ function openSheet(slug) {
     + '<div class="sx"><div class="sl">Best for</div><div style="font-size:13px;line-height:1.45">'+best+'</div></div>'
     + (avoid ? '<div class="sx"><div class="sl">Avoid</div><div style="font-size:12px;color:var(--muted)">'+avoid+'</div></div>' : '')
     + (occs ? '<div class="sx"><div class="sl">Occasions</div><div style="display:flex;gap:4px;flex-wrap:wrap;font-size:12px">'+occs+'</div></div>' : '')
-    + '<button class="pk" onclick="pick(''+t.slug+'',''+t.name+'')">Pick This Template</button>'
+    + '<button class="pk" onclick="pick(\''+t.slug+'\',\''+t.name+'\')">Pick This Template</button>'
     + '<div class="ok" id="ok">Copied! Now paste in chat: <b>use '+t.slug+'</b></div>';
   ST.classList.add('o');
 }
