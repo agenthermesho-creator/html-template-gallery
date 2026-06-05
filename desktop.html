@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Template Gallery — Desktop</title>
+<style>
+  :root {
+    --bg: #f0ede8;
+    --surface: #fff;
+    --border: #e0dbd2;
+    --text: #1a1815;
+    --muted: #8a857a;
+    --accent: #0969da;
+    --accent-hover: #0557b7;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,.06);
+    --shadow-hover: 0 8px 25px rgba(0,0,0,.10);
+    --header-h: 60px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* ========== HEADER ========== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(240,237,232,.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  header h1 {
+    font-size: 17px;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: -.3px;
+  }
+  header .count-badge {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2px 10px;
+    white-space: nowrap;
+  }
+
+  /* ========== FILTERS ========== */
+  .filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+  }
+  .cat-group {
+    display: flex;
+    gap: 4px;
+  }
+  .cat-group button {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .12s;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .cat-group button:hover { border-color: #bbb; background: #faf9f7; }
+  .cat-group button.on {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .cat-group button.on:hover { background: var(--accent-hover); }
+
+  .src-group {
+    display: flex;
+    gap: 4px;
+    margin-left: 4px;
+    padding-left: 12px;
+    border-left: 1px solid var(--border);
+  }
+  .src-group button {
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .12s;
+    color: var(--muted);
+  }
+  .src-group button:hover { border-color: #bbb; }
+  .src-group button.on {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .filters .spacer { flex: 1; }
+
+  .search-wrap {
+    position: relative;
+    width: 200px;
+  }
+  .search-wrap input {
+    width: 100%;
+    padding: 6px 12px 6px 30px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    outline: none;
+    background: var(--surface);
+    transition: border-color .15s;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap::before {
+    content: '\1F50D';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    opacity: .5;
+    pointer-events: none;
+  }
+
+  /* ========== GRID ========== */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    padding: 24px 32px 48px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: #ccc;
+  }
+  .card:active { transform: translateY(-1px); }
+
+  .card-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    background: #f5f3ef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .3s;
+  }
+  .card:hover .card-img img { transform: scale(1.03); }
+
+  .card-body {
+    padding: 12px 14px 14px;
+  }
+  .card-row1 {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .card-name {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -.2px;
+  }
+  .card-slides {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .card-tagline {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .card-tags span {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    background: #f0ede8;
+    color: #666;
+    font-weight: 500;
+    letter-spacing: .2px;
+    text-transform: uppercase;
+  }
+  .card-tags .pr { background: #dbeafe; color: #1d4ed8; }
+  .card-tags .ed { background: #fef3c7; color: #b45309; }
+  .card-tags .fu { background: #fce7f3; color: #be185d; }
+  .card-tags .bo { background: #ede9fe; color: #7c3aed; }
+  .card-tags .wa { background: #ffedd5; color: #c2410c; }
+  .card-tags .cl { background: #e2e8f0; color: #475569; }
+  .card-tags .ot { background: #f0ede8; color: #666; }
+
+  .empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  /* ========== MODAL ========== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: fadeIn .18s ease;
+  }
+  .modal-overlay.open { display: flex; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  .modal-panel {
+    background: var(--surface);
+    border-radius: 16px;
+    width: 640px;
+    max-width: 92vw;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 12px 48px rgba(0,0,0,.18);
+    padding: 28px 32px 32px;
+    position: relative;
+    animation: slideUp .22s ease;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--bg);
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    transition: background .12s;
+  }
+  .modal-close:hover { background: #ddd; }
+
+  .modal-scroll-wrap {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+  }
+  .modal-scroll-wrap img {
+    width: 85%;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  .modal-name {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -.3px;
+  }
+  .modal-tagline {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 16px;
+  }
+
+  .modal-section { margin-bottom: 14px; }
+  .modal-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .modal-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .modal-tags span {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    background: #f0ede8;
+    color: #555;
+  }
+  .modal-tags .pr { background: #dbeafe; color: #1d4ed8; }
+  .modal-tags .ed { background: #fef3c7; color: #b45309; }
+  .modal-tags .fu { background: #fce7f3; color: #be185d; }
+  .modal-tags .bo { background: #ede9fe; color: #7c3aed; }
+  .modal-tags .wa { background: #ffedd5; color: #c2410c; }
+  .modal-tags .cl { background: #e2e8f0; color: #475569; }
+  .modal-tags .ot { background: #f0ede8; color: #666; }
+
+  .modal-best {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #333;
+  }
+  .modal-avoid {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .modal-occasions {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .modal-occasions span {
+    background: #f0ede8;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #555;
+  }
+
+  .modal-pick {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background .12s;
+  }
+  .modal-pick:hover { background: var(--accent-hover); }
+  .modal-copied {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 16px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .modal-copied.show { display: block; }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 820px) {
+    header { padding: 0 16px; gap: 12px; flex-wrap: wrap; height: auto; min-height: 52px; padding-top: 8px; padding-bottom: 8px; }
+    .filters { flex-wrap: wrap; }
+    .cat-group { overflow-x: auto; }
+    .search-wrap { width: 140px; }
+    .grid { padding: 12px 16px 32px; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+    .modal-panel { width: 95vw; padding: 20px; }
+  }
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 15px; }
+  }
+
+  /* Scrollbar style */
+  .modal-panel::-webkit-scrollbar { width: 6px; }
+  .modal-panel::-webkit-scrollbar-track { background: transparent; }
+  .modal-panel::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+  .modal-scroll-wrap::-webkit-scrollbar { height: 4px; }
+  .modal-scroll-wrap::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Template Gallery</h1>
+  <span class="count-badge" id="countDisplay">112</span>
+  <div class="filters">
+    <div class="cat-group" id="catGroup">
+      <button class="on" data-g="all">All</button>
+      <button data-g="pr">Pro</button>
+      <button data-g="ed">Edit</button>
+      <button data-g="fu">Fun</button>
+      <button data-g="bo">Bold</button>
+      <button data-g="wa">Warm</button>
+      <button data-g="cl">Clean</button>
+    </div>
+    <div class="src-group" id="srcGroup">
+      <button class="on" data-src="all">All</button>
+      <button data-src="beautiful">Beautiful</button>
+      <button data-src="ha">html-anything</button>
+    </div>
+    <span class="spacer"></span>
+    <div class="search-wrap">
+      <input id="searchInput" type="search" placeholder="Search templates…" autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-panel" id="modalPanel" role="dialog" aria-label="Template details">
+    <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+/* ========== DATA ========== */
+const D = [{"slug":"8-bit-orbit","name":"8-Bit Orbit","tagline":"Pixel-art neon arcade aesthetic on a deep navy void.","mood":["retro-tech","playful","cyberpunk","energetic"],"occasion":["gaming pitch","hackathon demo","web3 / crypto deck","indie product launch","developer tools","synthwave brand"],"tone":["geeky","neon","rebellious","sci-fi"],"formality":"low","density":"medium","scheme":"dark","best_for":"Anything that should feel like a CRT screen at 2am: cyberpunk, gaming, web3, indie dev tools, hackathon demos. Just as good for a tech talk that wants to lean into nostalgic-digital craft, a synthwave brand deck, or a creative review that wants to feel like a console.","avoid_for":"Contexts where the dark neon palette would actively work against the message \u2014 quiet institutional finance disclosures, healthcare patient-facing materials, traditional luxury.","slide_count":10},{"slug":"biennale-yellow","name":"Biennale Yellow","tagline":"Solar yellow on warm parchment with deep indigo serif and atmospheric sun-glow gradients.","mood":["editorial","atmospheric","warm","cultural-institution","poster-like"],"occasion":["exhibition or biennale","arts institution programme","design or typography conference","literary or curatorial publication","studio annual report","museum season announcement"],"tone":["literary","considered","contemplative","warm-modern","Dutch-editorial"],"formality":"high","density":"medium","scheme":"light","best_for":"Anything that should feel like an art-biennale poster or a museum's annual programme: exhibition decks, arts-institution announcements, design conference brochures, curatorial pitches, literary publications, studio retrospectives. Equally good for any deck wanting Dutch-editorial atmosphere with an unmistakable single-color signature.","avoid_for":"Decks that need visual punch or saturated multi-color energy \u2014 the warm-paper canvas and one-yellow palette are intentionally quiet and atmospheric.","slide_count":8},{"slug":"block-frame","name":"BlockFrame","tagline":"Neobrutalist deck with pastel-neon color blocks and chunky black borders.","mood":["bold","playful","graphic","fresh"],"occasion":["creative agency pitch","indie SaaS launch","designer portfolio","brand redesign","modern startup deck"],"tone":["confident","graphic","pop","design-led"],"formality":"medium-low","density":"high","scheme":"light","best_for":"Anything that should feel pop-graphic and design-led: indie SaaS launches, agency credentials, creative reviews, brand redesigns. Also a strong unexpected pick for tech, finance, or research when the speaker wants to land as confident and contemporary rather than buttoned-up.","avoid_for":"Contexts that require quiet institutional restraint or traditional weight (regulated disclosures, formal legal briefs).","slide_count":10},{"slug":"blue-professional","name":"Blue Professional","tagline":"Cream paper background with electric cobalt blue accents; clean modern professional.","mood":["professional","modern","calm","trustworthy"],"occasion":["B2B SaaS pitch","consulting deliverable","internal review","advisory pitch","investor update"],"tone":["clean","considered","polished","neutral"],"formality":"medium-high","density":"medium","scheme":"light","best_for":"Anything that should feel modern-considered and lightly authoritative: B2B SaaS pitches, consulting deliverables, advisory updates, investor reports. Also a clean, tasteful choice whenever you want to read as professional without going stiff \u2014 research synthesis, internal reviews, brand work for service businesses.","avoid_for":"Contexts where the deck should feel hot, playful, or intentionally informal \u2014 the cool electric-blue restraint will read as overly polished.","slide_count":10},{"slug":"bold-poster","name":"Bold Poster","tagline":"Editorial poster aesthetic with massive Shrikhand display and a single fire-engine red accent.","mood":["bold","editorial","loud","confident"],"occasion":["brand manifesto","creative-led pitch","magazine / editorial","founder vision deck","art / culture"],"tone":["dramatic","graphic","sharp","intentional"],"formality":"medium","density":"low","scheme":"light","best_for":"Anything that should land like a magazine cover: brand manifestos, founder vision decks, editorial / cultural pitches, creative reviews. Excellent any time you want a few words to feel like a poster \u2014 including unexpected fits like a tech keynote or a finance manifesto that wants to be quotable.","avoid_for":"Decks that need to communicate dense information per slide \u2014 the layout is built around a few large statements, not paragraphs of detail.","slide_count":10},{"slug":"broadside","name":"Broadside","tagline":"Dark editorial canvas with a single fire orange accent and bilingual Latin/Chinese type stack.","mood":["editorial","dramatic","loud","newspaper"],"occasion":["brand manifesto","founder vision deck","magazine / cultural pitch","design talk","bilingual EN/CN deck","campaign launch"],"tone":["graphic","punchy","literary","considered"],"formality":"medium-high","density":"medium","scheme":"dark","best_for":"Anything that should land like a broadside newspaper headline: brand manifestos, magazine and cultural pitches, design talks, bilingual EN/CN decks, founder vision statements. Also a striking pick for tech, research, or business decks that want a dramatic single-accent editorial feel.","avoid_for":"Decks that need to feel quiet, warm, or institutionally traditional \u2014 the dark canvas with fire-orange accent commits to drama.","slide_count":20},{"slug":"capsule","name":"Capsule","tagline":"Modular pill-shaped cards on warm bone with a full pastel-pop palette.","mood":["playful","modern","warm","fresh","fun"],"occasion":["lifestyle brand","creator portfolio","DTC product launch","wellness or beauty pitch","Y2K-tinged brand work"],"tone":["upbeat","graphic","approachable","cool"],"formality":"medium-low","density":"medium","scheme":"light","best_for":"Anything that should feel modular, modern, and a little Y2K: lifestyle brands, creator portfolios, DTC launches, beauty / wellness, agency credentials. Also fun for a playful tech demo or a research deck that wants pop-art clarity instead of gravitas.","avoid_for":"Contexts that require traditional institutional weight \u2014 the capsule shapes and pastel pops actively soften authority.","slide_count":10},{"slug":"cartesian","name":"Cartesian","tagline":"Quiet warm-neutral palette with classical Playfair serifs; tasteful and unhurried.","mood":["quiet","considered","elegant","warm-minimal"],"occasion":["investment thesis","white paper","advisory deliverable","research report","book / longform pitch","gallery / cultural"],"tone":["classical","literary","restrained","confident-quiet"],"formality":"high","density":"low","scheme":"light","best_for":"Anything that should feel quiet, considered, and grown-up: investment theses, white papers, advisory work, longform research, gallery / cultural decks. Also a strong choice for editorial features, founder reflections, or any deck where restraint is the message \u2014 including across tech and finance.","avoid_for":"Decks that need visual heat, multiple accents, or a sense of urgency \u2014 the warm-neutral palette is intentionally low-energy.","slide_count":10},{"slug":"cobalt-grid","name":"Cobalt Grid","tagline":"Electric cobalt serifs on a graph-paper canvas, anchored by stair-stepped pixel-glitch decorations and slim hairline rules.","mood":["editorial","design-research","studious","modernist","tech-print","monochrome"],"occasion":["design trend or research report","studio annual or seasonal bulletin","creative agency capabilities deck","art or architecture publication","academic / curatorial publication","newsletter or zine pitch"],"tone":["considered","literary","studious","quietly-modern","editorial"],"formality":"high","density":"medium","scheme":"light","best_for":"Anything that should feel like a quietly serious design / research bulletin, art publication, or curated trend report. Strong for studio annuals, agency capabilities decks, design-research publications, architecture / art / academic decks, and any deck wanting one strict accent colour and a printed-ledger calmness rather than corporate polish.","avoid_for":"Decks that need warmth, multi-colour energy, or a casual / playful voice \u2014 the strict cobalt + cream + grid palette is intentionally austere.","slide_count":8},{"slug":"coral","name":"Coral","tagline":"Cream and coral on near-black, set in oversized Bebas Neue.","mood":["bold","warm","modern","confident"],"occasion":["fashion / beauty pitch","fitness brand","F&B brand deck","lifestyle launch","creative agency"],"tone":["graphic","punchy","magazine"],"formality":"medium","density":"medium","scheme":"mixed","best_for":"Anything that should feel warm-graphic and editorial: fashion, beauty, fitness, F&B, lifestyle brands, agency credentials. Just as strong for a creator portfolio, a manifesto, or a tech / research deck that wants warmth and a single bold accent instead of corporate cool.","avoid_for":"Contexts that should feel quiet or institutional \u2014 the coral accent and oversized Bebas Neue commit hard to a confident magazine voice.","slide_count":10},{"slug":"creative-mode","name":"Creative Mode","tagline":"Cream paper canvas with confident multi-color (green, pink, orange, yellow) accents and Archivo Black display.","mood":["creative","confident","playful","design-led"],"occasion":["creative agency pitch","design studio deck","ad shop credentials","brand creative review","concept presentation"],"tone":["graphic","expressive","modern"],"formality":"medium","density":"medium-high","scheme":"light","best_for":"Anything that should feel design-led and confident: creative agency pitches, design studio decks, ad shop credentials, brand creative reviews, art-direction reviews. Also a great unexpected pick for a tech talk, research findings, or finance review when the speaker wants to lead with taste rather than convention.","avoid_for":"Contexts that demand institutional restraint and a quiet authority \u2014 the saturated multi-accent palette will read as expressive, not formal.","slide_count":8},{"slug":"daisy-days","name":"Daisy Days","tagline":"Cheerful pastel deck with hand-drawn daisies, stars, and rainbows. Friendly, soft, and warm.","mood":["cheerful","playful","warm","sunny","wholesome"],"occasion":["education / classroom","kids product launch","wellness program","community workshop","creator portfolio (craft / illustration)","team kickoff","wedding / baby shower planning"],"tone":["friendly","soft","encouraging","approachable","lighthearted"],"formality":"low","density":"medium","scheme":"light","best_for":"Anything that should feel friendly, soft, and joyful: educational content, kids and family, wellness programs, community workshops, creator portfolios for craft / illustration. Also lovely for an unexpected playful internal kickoff, a wedding planning deck, or any moment where warmth is the message \u2014 including across tech or business contexts.","avoid_for":"Contexts where the audience explicitly expects authority and precision \u2014 the hand-drawn pastel SVG decorations are the opposite of buttoned-up.","slide_count":10},{"slug":"editorial-forest","name":"Editorial Forest","tagline":"Forest green, dusty pink, and warm cream meet Source Serif 4 in a quiet, intentional quarterly-review deck.","mood":["editorial","quiet","considered","warm","intentional"],"occasion":["quarterly review","internal readout","studio update","creative agency deck","research recap"],"tone":["literary","thoughtful","warm","low-pressure"],"formality":"medium","density":"medium","scheme":"mixed","best_for":"Anything that should feel like a considered editorial \u2014 quarterly reviews, internal readouts, studio updates, creative-agency presentations. Equally good for any deck that wants to feel warm and unhurried rather than corporate, including research recaps, book or program announcements, and team retrospectives.","avoid_for":"Contexts that need to feel urgent, punchy, or sales-driven \u2014 the palette and rhythm are intentionally quiet.","slide_count":8},{"slug":"editorial-tri-tone","name":"Editorial Tri-Tone","tagline":"Three-color editorial system: dusty pink, mustard cream, and deep burgundy, set in Bricolage + Instrument Serif.","mood":["editorial","warm","intentional","moody"],"occasion":["editorial / magazine pitch","fashion brand deck","lifestyle media","literary / cultural","art direction review"],"tone":["literary","warm","considered","stylish"],"formality":"medium-high","density":"medium","scheme":"mixed","best_for":"Anything that should feel like a fashion-magazine spread: editorial pitches, fashion brand decks, lifestyle media, art direction reviews. Equally good for any deck \u2014 including tech, research, or business \u2014 that wants tri-tone discipline and serif/sans contrast instead of the usual neutrals.","avoid_for":"Decks that need to read as soft or comforting \u2014 the burgundy/pink/cream tri-tone is intentionally high-contrast and styled.","slide_count":8},{"slug":"emerald-editorial","name":"Emerald Editorial","tagline":"A magazine-cover business deck: emerald + navy + paper, double-rule masthead ornaments, and a bold Bodoni-style display serif.","mood":["editorial","considered","confident","magazine-cover"],"occasion":["leadership presentation","quarterly review","strategy readout","planning office deck","executive briefing"],"tone":["literary","authoritative","warm","designed"],"formality":"medium-high","density":"medium","scheme":"mixed","best_for":"Anything that should feel like the front of a serious magazine, including but not limited to leadership readouts, planning-office reviews, and strategy briefings. The double-rule masthead ornament gives it editorial gravitas without making it stiff \u2014 also a great unexpected pick for product launches or research recaps that want to feel considered rather than corporate.","avoid_for":"Contexts that need to read as quiet, neutral, or institutionally restrained \u2014 the emerald field is too saturated to disappear into the background.","slide_count":8},{"slug":"grove","name":"Grove","tagline":"Forest-green canvas with cream type, classical Playfair serifs, and a single rust accent.","mood":["organic","considered","warm","literary","natural"],"occasion":["sustainability brand","wellness brand","outdoor / nature product","winery or restaurant","literary or arts deck","advisory deliverable","bilingual EN/CN deck"],"tone":["classical","warm","considered","patient"],"formality":"medium-high","density":"medium","scheme":"mixed","best_for":"Anything that should feel organic, considered, and grown-up: sustainability and wellness brands, outdoor / nature products, wineries and restaurants, literary or arts decks, advisory deliverables, bilingual EN/CN reports. Also a calm, distinctive choice for tech, research, or business decks that want patience over urgency.","avoid_for":"Decks that need neon energy or rapid-fire pop \u2014 the forest-green canvas and Playfair serif commit to a slow, classical voice.","slide_count":12},{"slug":"long-table","name":"Long Table","tagline":"Warm cream and rust-red supper-club aesthetic with bold uppercase grotesk headlines, Fraunces serifs, and pill-shaped outlined buttons.","mood":["warm","intimate","modern","friendly","small-batch","social","hospitality"],"occasion":["supper club or dinner series","event or community gathering","small hospitality / restaurant brand","creative studio open house","membership or subscription pitch","wine or food brand catalogue","modern lifestyle brand"],"tone":["warm","playful","considered","social","magazine-friendly","modern-editorial"],"formality":"medium","density":"medium","scheme":"light","best_for":"Anything that should feel like a warm, intimate, modern hospitality / community brand: supper clubs, dinner series, small restaurants, creative-studio events, membership pitches, lifestyle and wine brands. Equally good for any deck wanting a single warm accent colour, mixed-weight typography, and a social-media-aware modern-editorial voice.","avoid_for":"Decks that need corporate polish, technical density, or a cold / minimalist register \u2014 the rust-red palette and bold serif mix are intentionally warm and people-facing.","slide_count":8},{"slug":"mat","name":"Mat","tagline":"Dark sage canvas with bone paper and burnt-orange accent; mid-century modern with wood undertones.","mood":["warm-modern","considered","tactile","mid-century"],"occasion":["design studio credentials","architecture / interior brand","ceramics or craft brand","furniture pitch","advisory deliverable","bilingual EN/CN deck"],"tone":["warm","design-led","intentional","considered"],"formality":"medium","density":"medium","scheme":"mixed","best_for":"Anything that should feel mid-century, tactile, and intentional: design studio credentials, architecture / interior brands, ceramics / craft / furniture, advisory decks. Also a warm, distinctive choice for tech, research, or business decks that want a considered analog feel instead of digital-cool.","avoid_for":"Contexts that need fast tech energy or institutional restraint \u2014 the muted sage and burnt-orange palette is intentionally warm and slow.","slide_count":9},{"slug":"monochrome","name":"Monochrome","tagline":"Ivory ledger paper with all-black type; Lora serif headlines, Jost body, no color at all.","mood":["restrained","literary","archival","ledger"],"occasion":["user research synthesis","white paper","longform report","academic deck","policy brief","advisory deliverable","bilingual EN/CN deck"],"tone":["literary","considered","neutral","honest"],"formality":"high","density":"high","scheme":"light","best_for":"Anything that should feel like a hand-typeset ledger: user research synthesis, white papers, longform reports, academic and policy briefs, advisory deliverables, bilingual EN/CN reports. Equally good for tech, design, or brand decks that want their words to be the only thing on the page.","avoid_for":"Decks that need visual personality or color-led storytelling \u2014 the all-ink palette is intentionally austere.","slide_count":18},{"slug":"neo-grid-bold","name":"Neo-Grid Bold","tagline":"Editorial neo-brutalism with a single neon yellow accent on off-white paper.","mood":["confident","punchy","editorial","modern"],"occasion":["product launch","design review","founder pitch","brand deck","consulting findings","conference talk"],"tone":["bold","minimal","design-led","graphic"],"formality":"medium","density":"high","scheme":"light","best_for":"Anything that should feel confident and editorial-graphic: design-led pitches, brand work, founder talks, conference keynotes. Excellent for stat-heavy slides, comparisons, and process flows. Just as strong for tech, research, or finance when the speaker wants to read as design-led rather than corporate.","avoid_for":"Contexts that need to feel quiet, traditional, or warm \u2014 the neon-yellow accent and uppercase display commit to a confident editorial voice.","slide_count":13},{"slug":"peoples-platform","name":"People's Platform (Block & Bold)","tagline":"Activist poster energy: blue, orange, red on cream, with Alfa Slab + Caveat Brush.","mood":["activist","loud","graphic","honest"],"occasion":["cultural commentary","manifesto","community / civic deck","design talk","campaign pitch","founder vision"],"tone":["punchy","direct","expressive","warm-bold"],"formality":"medium-low","density":"medium-high","scheme":"light","best_for":"Anything that should feel honest, loud, and graphic: cultural commentary, manifestos, civic and community decks, design talks, campaign pitches. Excellent for founder-vision moments, mission statements, or any deck \u2014 including across industries \u2014 that wants protest-poster energy instead of corporate polish.","avoid_for":"Contexts where institutional restraint is the actual goal \u2014 the saturated political-poster palette commits hard to expressive energy.","slide_count":10},{"slug":"pin-and-paper","name":"Pin & Paper","tagline":"Yellow paper with safety-pin illustrations, ink-blue handwritten Caveat, paper-grain texture.","mood":["crafted","handmade","warm","thoughtful","literary"],"occasion":["research findings with personality","qualitative report","founder reflection","creator essay deck","workshop debrief"],"tone":["literary","intimate","warm","grounded"],"formality":"medium","density":"medium","scheme":"light","best_for":"Anything that should feel hand-crafted, warm, and literary: qualitative research findings, founder reflections, longform brand stories, workshop debriefs. The signature safety-pin illustrations and paper-grain texture make it especially good for any deck \u2014 including tech or business \u2014 that wants personality and warmth over polish.","avoid_for":"Decks that need to feel digital-native polished or rigorously data-driven \u2014 handwritten Caveat is intentionally informal.","slide_count":11},{"slug":"pink-script","name":"Pink Script \u2014 After Hours","tagline":"Black canvas, hot pink accent, pearl-cream paper, Instrument Serif headlines: late-night editorial luxury.","mood":["nocturnal","moody","intentional","luxe","expressive"],"occasion":["fashion brand deck","creator personal brand","after-hours product (nightlife / dating / spirits)","luxury launch","editorial feature"],"tone":["literary","sultry","considered","magazine"],"formality":"medium-high","density":"low","scheme":"dark","best_for":"Anything that should feel nocturnal, intentional, and a little luxe: fashion brand decks, creator personal brands, after-hours / nightlife / spirits launches, luxury product reveals, editorial features. Also a striking unexpected pick for a tech keynote, research synthesis, or business pitch that wants to land with magnetic confidence.","avoid_for":"Daytime corporate-professional and traditional B2B contexts where the dark canvas with hot-pink accent reads as too styled or too expressive.","slide_count":9},{"slug":"playful","name":"Playful","tagline":"Sun-warm peach background with Syne display: a friendly indie launch deck.","mood":["warm","approachable","indie","friendly"],"occasion":["creator portfolio","indie product launch","lifestyle brand","small-business pitch","newsletter / community"],"tone":["upbeat","informal","welcoming"],"formality":"low","density":"medium","scheme":"light","best_for":"Anything that should feel warm, indie, and approachable: creator portfolios, indie product launches, lifestyle brands, small-business pitches, newsletter / community decks. Also welcoming for any deck \u2014 including tech or research \u2014 that wants to feel friendly and human rather than corporate.","avoid_for":"Contexts where institutional credibility matters more than warmth \u2014 the peach palette is intentionally informal.","slide_count":10},{"slug":"raw-grid","name":"Raw Grid","tagline":"Neo-brutalist deck with thick borders, offset shadows, and a pink/sage/ink palette.","mood":["raw","punchy","energetic","confident"],"occasion":["startup pitch","accelerator demo day","founder pitch","indie product launch","brand deck","creator portfolio"],"tone":["direct","modern","no-nonsense","graphic"],"formality":"medium-low","density":"high","scheme":"light","best_for":"Anything that should feel direct and graphic-confident: founder pitches, accelerator demos, brand decks, indie launches, creator portfolios. Strong for stat slides, comparison tables, and process flows. Equally good for tech, research, or finance when the speaker wants the deck to feel scrappy-confident rather than buttoned-up.","avoid_for":"Contexts that need to feel soft, warm, or intentionally quiet \u2014 the brutalist borders and offset shadows commit to a graphic voice.","slide_count":10},{"slug":"retro-windows","name":"Retro Windows","tagline":"Windows 95 chrome: gray title bars, MS Sans Serif, pixel typography, full nostalgia.","mood":["nostalgic","retro","geeky","playful"],"occasion":["retro gaming pitch","Y2K brand","creator portfolio (90s aesthetic)","tech-history talk","shitpost-but-make-it-fancy deck"],"tone":["winking","nostalgic","geeky","fun"],"formality":"low","density":"medium","scheme":"light","best_for":"Anything that should feel knowingly nostalgic: retro gaming, Y2K-aesthetic brands, creator portfolios with a 90s vibe, tech-history talks, deliberately tongue-in-cheek decks. A great choice anywhere a playful retro reference is the entire point.","avoid_for":"Decks that need to read as modern, elegant, or institutionally credible \u2014 the Win95 chrome will always read as a costume.","slide_count":10},{"slug":"retro-zine","name":"Retro Zine","tagline":"Beige paper with green accent and Bebas Neue + Caveat: a riso-printed zine in HTML form.","mood":["crafted","lo-fi","underground","warm-retro"],"occasion":["indie zine / publication","music or arts brand","creator portfolio","small-batch / craft launch","cultural / community deck"],"tone":["scrappy","warm","intentional","DIY"],"formality":"medium-low","density":"medium","scheme":"light","best_for":"Anything that should feel printed, lo-fi, and crafted: indie zines and publications, music / arts brands, creator portfolios, small-batch craft launches, community decks. Also a great underdog choice for tech, research, or business decks that want a riso-print warmth instead of digital polish.","avoid_for":"Contexts that demand digital-native polish or fast modern-tech energy \u2014 the layered zine aesthetic intentionally feels handmade.","slide_count":10},{"slug":"sakura-chroma","name":"Sakura Chroma","tagline":"Vintage Japanese cassette-package aesthetic: cream paper, diagonal rainbow ribbons, condensed bold type, JIS-style spec checkboxes.","mood":["retro","playful","kawaii-tech","warm","tactile","product-catalogue"],"occasion":["product launch or catalogue","indie hardware or analog studio brand","music label or release schedule","creative studio annual report","magazine or zine pitch","vintage-flavored brand campaign"],"tone":["playful","confident","warm","tactile","80s-Japanese-tech"],"formality":"low","density":"medium","scheme":"light","best_for":"Anything that should feel like a vintage Japanese cassette package or a TDK / Sony / Sakura Color product catalogue: indie hardware brand decks, music-label release schedules, analog studio retrospectives, zine and magazine pitches, kawaii-tech product launches, creative-studio annual reports. Equally good for any deck wanting bold colour, condensed display type, and a tactile printed-product personality.","avoid_for":"Decks that need restrained, corporate, or quiet typography \u2014 the bold condensed lockups, ribbon stripes, and primary-colour palette are intentionally loud and product-page-y.","slide_count":8},{"slug":"scatterbrain","name":"Scatterbrain","tagline":"Post-it inspired: pastel sticky notes, Caveat handwriting, Shrikhand and Zilla Slab type stack.","mood":["playful","creative","warm","messy-on-purpose","workshop"],"occasion":["brainstorm / workshop","creative agency credentials","design-thinking session","ideation pitch","art-direction review"],"tone":["informal","warm","expressive","human"],"formality":"low","density":"high","scheme":"light","best_for":"Anything that should feel like a designer's whiteboard: brainstorms, workshops, creative-agency credentials, design-thinking sessions, ideation pitches, art-direction reviews. Equally fun for any deck \u2014 including tech, research, or business \u2014 that wants to read as in-progress thinking rather than polished conclusions.","avoid_for":"Contexts that demand precision and institutional weight \u2014 the post-it sticky-note aesthetic intentionally reads as warm and unfinished.","slide_count":10},{"slug":"signal","name":"Signal","tagline":"Deep navy canvas with bone paper and a single muted-gold accent; institutional with quiet weight.","mood":["institutional","trustworthy","considered","weighty"],"occasion":["investor deck","consulting deliverable","board presentation","legal / policy brief","academic deck","advisory pitch","bilingual EN/CN deck"],"tone":["sober","polished","established","literary"],"formality":"high","density":"high","scheme":"mixed","best_for":"Anything that should feel weighty, considered, and credibly institutional: investor decks, board presentations, consulting deliverables, legal / policy briefs, advisory pitches. Also a strong choice for tech, research, or brand work that wants to read as quietly authoritative rather than loud.","avoid_for":"Contexts that should feel hot, fast, or intentionally playful \u2014 the navy + gold restraint commits to a sober voice.","slide_count":18},{"slug":"soft-editorial","name":"Soft Editorial","tagline":"Cormorant Garamond serif on warm paper with sage, blush, and lemon accents.","mood":["literary","elegant","quiet","warm-classical"],"occasion":["editorial feature","longform brand story","gallery or museum","literary pitch","advisory deliverable","wedding / lifestyle media"],"tone":["literary","considered","warm","magazine"],"formality":"high","density":"low","scheme":"light","best_for":"Anything that should feel literary, elegant, and unhurried: editorial features, longform brand stories, gallery / museum decks, advisory deliverables, wedding / lifestyle media, founder essays. Equally good for tech, research, or business decks that want a Sunday-supplement warmth instead of corporate polish.","avoid_for":"Decks that need visual heat or punch \u2014 the warm-paper palette and Cormorant serif are intentionally quiet.","slide_count":12},{"slug":"stencil-tablet","name":"Stencil & Tablet","tagline":"Bone paper with stencil-cut headlines and a six-color earth palette: archaeology meets brand.","mood":["archival","earthy","tactile","considered","graphic"],"occasion":["museum / cultural institution","art / architecture brand","longform research","heritage / craft brand","manifesto"],"tone":["weighty","considered","tactile","literary"],"formality":"medium-high","density":"medium","scheme":"light","best_for":"Anything that should feel archival, tactile, and weighty-graphic: museum and cultural-institution decks, art / architecture brands, longform research, heritage and craft brands, manifestos. A great choice anytime \u2014 including across tech and business \u2014 when you want the deck to feel like a field manual rather than a slide deck.","avoid_for":"Contexts that demand digital-native polish or playful pop \u2014 the stencil-cut display and earth-tone palette commit to a deliberate analog feel.","slide_count":11},{"slug":"studio","name":"Studio","tagline":"Black canvas with electric-yellow type; high-voltage design studio aesthetic.","mood":["electric","bold","graphic","design-led","high-contrast"],"occasion":["design studio credentials","creative agency pitch","brand showcase","art-direction review","fashion / sneaker brand","bilingual EN/CN deck"],"tone":["graphic","loud","modern","intentional"],"formality":"medium","density":"medium","scheme":"dark","best_for":"Anything that should feel electric and design-led: studio credentials, creative agency pitches, brand showcases, art-direction reviews, fashion / sneaker brand work. Also a striking unexpected choice for tech, research, or business decks where the speaker wants the deck to *be* a brand statement.","avoid_for":"Contexts that should feel quiet or institutional \u2014 the black-and-electric-yellow palette is the loudest in the library.","slide_count":12},{"slug":"vellum","name":"Vellum","tagline":"Deep navy canvas with warm-yellow Cormorant serifs and a single dusty teal accent. A quiet, scholarly aesthetic.","mood":["scholarly","literary","considered","quiet","intellectual"],"occasion":["research findings","white paper or longform report","academic or university deck","advisory deliverable","literary or editorial pitch","founder reflection / vision deck","bilingual EN/CN deck"],"tone":["literary","considered","patient","intelligent"],"formality":"high","density":"low","scheme":"dark","best_for":"Anything that should feel scholarly, literary, and quietly intelligent: research synthesis, white papers, academic and policy briefs, advisory deliverables, longform editorial pieces, founder reflections. Equally strong for any deck \u2014 including tech, business, or creator work \u2014 that wants a calm, considered atmosphere instead of energetic visuals.","avoid_for":"Contexts that need visual heat or pop \u2014 the navy + warm-yellow Cormorant aesthetic is intentionally low-tempo.","slide_count":9}];
+const HA = [{"slug":"article-magazine","name":"Article Magazine","tagline":"Substack / Medium long-form article","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Long-form articles, editorial content"},{"slug":"blog-post","name":"Blog Post","tagline":"Magazine-style long-form layout","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Blog posts, editorial features"},{"slug":"card-twitter","name":"Card Twitter","tagline":"Twitter quote / data cards","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Social media quote cards"},{"slug":"card-xiaohongshu","name":"Card Xiaohongshu","tagline":"Xiaohongshu-style knowledge cards","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Social media carousel cards"},{"slug":"competitive-teardown","name":"Competitive Teardown","tagline":"Positioning map + feature matrix + pricing","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Competitive analysis reports"},{"slug":"dashboard","name":"Dashboard","tagline":"Fixed sidebar + header + KPI grid + charts","mood":["html-anything"],"formality":"medium","scheme":"mixed","slide_count":1,"best_for":"Internal dashboards, analytics"},{"slug":"data-report","name":"Data Report","tagline":"CSV/Excel/JSON data into visual reports","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Data-driven reports"},{"slug":"dating-web","name":"Dating Web","tagline":"Dating-style matching dashboard","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Matchmaking UIs"},{"slug":"deck-blueprint","name":"Deck Blueprint","tagline":"Cream paper + rust red + blueprint grid","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Presentation decks"},{"slug":"deck-course-module","name":"Deck Course Module","tagline":"Warm paper + Playfair + MCQ self-test","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Course modules, educational decks"},{"slug":"deck-dir-key-nav","name":"Deck Dir Key Nav","tagline":"8-page mono background, 160px display","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Keyboard-navigated presentations"},{"slug":"deck-graphify-dark","name":"Deck Graphify Dark","tagline":"Midnight gradient + floating orbs + force graph","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Dark-themed data presentations"},{"slug":"deck-guizang-editorial","name":"Deck Guizang Editorial","tagline":"E-magazine x e-ink; 10 layouts + 5 palettes","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Editorial presentations"},{"slug":"deck-hermes-cyber","name":"Deck Hermes Cyber","tagline":"Black + CRT grid + terminal-style headlines","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Cyberpunk-themed decks"},{"slug":"deck-magazine-web","name":"Deck Magazine Web","tagline":"E-magazine x e-ink, WebGL fluid background","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Magazine-style presentations"},{"slug":"deck-obsidian-claude","name":"Deck Obsidian Claude","tagline":"GitHub-dark + purple ambient + code blocks","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Developer presentations"},{"slug":"deck-open-slide-canvas","name":"Deck Open Slide Canvas","tagline":"1920x1080 locked canvas, React components","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Custom slide decks"},{"slug":"deck-pitch","name":"Deck Pitch","tagline":"10-page pitch deck, blue-purple hero","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Investor pitch decks"},{"slug":"deck-presenter-mode","name":"Deck Presenter Mode","tagline":"Tokyo-night theme, 5 themes, teleprompter","mood":["html-anything"],"formality":"medium","scheme":"dark","slide_count":1,"best_for":"Live presentations with speaker notes"},{"slug":"deck-product-launch","name":"Deck Product Launch","tagline":"Dark hero + orange accent + pricing CTA","mood":["html-anything"],"formality":"medium","scheme":"dark","slide_count":1,"best_for":"Product launch decks"},{"slug":"deck-replit","name":"Deck Replit","tagline":"Replit Slides 8 themes","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Replit-style presentations"},{"slug":"deck-safety-alert","name":"Deck Safety Alert","tagline":"Red amber hazard + tier cards + strikethrough","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Safety briefings, alert presentations"},{"slug":"deck-simple","name":"Deck Simple","tagline":"Generic horizontal-swipe HTML deck","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Simple slide decks"},{"slug":"deck-swiss-international","name":"Deck Swiss International","tagline":"16-column grid + single accent + 22 layouts","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"International style presentations"},{"slug":"deck-tech-sharing","name":"Deck Tech Sharing","tagline":"GitHub-dark + JetBrains Mono + terminal code","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Tech talks, code presentations"},{"slug":"deck-xhs-pastel","name":"Deck XHS Pastel","tagline":"Cream + soft glow + macaron round cards","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Pastel-themed social decks"},{"slug":"deck-xhs-post","name":"Deck XHS Post","tagline":"9-page 3:4 vertical\u56fe\u6587, warm pastel + sticker","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Xiaohongshu vertical posts"},{"slug":"deck-xhs-white","name":"Deck XHS White","tagline":"Pure white + rainbow bar + gradient text","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Clean social media decks"},{"slug":"digital-eguide","name":"Digital Eguide","tagline":"Two-page spread e-guide with cover + steps","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Digital guides, ebooks"},{"slug":"doc-kami-parchment","name":"Doc Kami Parchment","tagline":"Warm parchment + ink blue + single serif","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Editorial documents"},{"slug":"docs-page","name":"Docs Page","tagline":"Clean documentation page layout","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Documentation sites"},{"slug":"email-marketing","name":"Email Marketing","tagline":"Marketing email template","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Email campaigns"},{"slug":"eng-runbook","name":"Eng Runbook","tagline":"Engineering runbook layout","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Engineering runbooks"},{"slug":"exec-briefing-memo","name":"Exec Briefing Memo","tagline":"Executive briefing memo format","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Executive briefings"},{"slug":"experiment-readout","name":"Experiment Readout","tagline":"Experiment results report","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Experiment reports"},{"slug":"finance-report","name":"Finance Report","tagline":"Financial report layout","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Financial reports"},{"slug":"flowai-team-dashboard","name":"Flowai Team Dashboard","tagline":"Team workflow dashboard","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Team dashboards"},{"slug":"frame-data-chart-nyt","name":"Frame Data Chart NYT","tagline":"NYT-style data chart frame","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Data visualizations"},{"slug":"frame-flowchart-sticky","name":"Frame Flowchart Sticky","tagline":"Flowchart with sticky notes","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Flowchart frames"},{"slug":"frame-glitch-title","name":"Frame Glitch Title","tagline":"Glitch effect title frame","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Glitch effect titles"},{"slug":"frame-light-leak-cinema","name":"Frame Light Leak Cinema","tagline":"Cinematic light leak frame","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Cinematic title frames"},{"slug":"frame-liquid-bg-hero","name":"Frame Liquid BG Hero","tagline":"Liquid background hero frame","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Liquid background heroes"},{"slug":"frame-logo-outro","name":"Frame Logo Outro","tagline":"Logo outro/finale frame","mood":["html-anything"],"formality":"medium","scheme":"dark","slide_count":1,"best_for":"Logo outro frames"},{"slug":"frame-macos-notification","name":"Frame MacOS Notification","tagline":"macOS notification style frame","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"macOS-style notifications"},{"slug":"gamified-app","name":"Gamified App","tagline":"Gamified application layout","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Gamified apps"},{"slug":"hr-onboarding","name":"HR Onboarding","tagline":"HR onboarding page","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"HR onboarding flows"},{"slug":"invoice","name":"Invoice","tagline":"Invoice template","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Invoices"},{"slug":"kanban-board","name":"Kanban Board","tagline":"Kanban board layout","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Kanban boards"},{"slug":"live-dashboard","name":"Live Dashboard","tagline":"Live data dashboard","mood":["html-anything"],"formality":"medium","scheme":"dark","slide_count":1,"best_for":"Live dashboards"},{"slug":"magazine-poster","name":"Magazine Poster","tagline":"Magazine poster layout","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Poster layouts"},{"slug":"meeting-notes","name":"Meeting Notes","tagline":"Meeting notes template","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Meeting notes"},{"slug":"mobile-app","name":"Mobile App","tagline":"Mobile app screen layout","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Mobile app screens"},{"slug":"mobile-onboarding","name":"Mobile Onboarding","tagline":"Mobile onboarding flow","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Mobile onboarding"},{"slug":"mockup-device-3d","name":"Mockup Device 3D","tagline":"3D device mockup frame","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Device mockups"},{"slug":"motion-frames","name":"Motion Frames","tagline":"Motion graphics frames","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Motion graphics"},{"slug":"pm-spec","name":"PM Spec","tagline":"Product manager spec template","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"PM specifications"},{"slug":"poster-hero","name":"Poster Hero","tagline":"Hero poster layout","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Hero posters"},{"slug":"ppt-keynote","name":"PPT Keynote","tagline":"PowerPoint / Keynote export","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"PPT/Keynote slides"},{"slug":"pricing-page","name":"Pricing Page","tagline":"SaaS pricing page layout","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Pricing pages"},{"slug":"prototype-web","name":"Prototype Web","tagline":"Web prototype layout","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Web prototypes"},{"slug":"resume-modern","name":"Resume Modern","tagline":"Modern resume template","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Resumes"},{"slug":"saas-landing","name":"SaaS Landing","tagline":"SaaS landing page","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"SaaS landing pages"},{"slug":"social-carousel","name":"Social Carousel","tagline":"Social media carousel","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Social media carousels"},{"slug":"social-media-dashboard","name":"Social Media Dashboard","tagline":"Social media analytics dashboard","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Social media dashboards"},{"slug":"social-media-matrix","name":"Social Media Matrix","tagline":"Social media content matrix","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Social content matrices"},{"slug":"social-reddit-card","name":"Social Reddit Card","tagline":"Reddit-style post card","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Reddit-style cards"},{"slug":"social-spotify-card","name":"Social Spotify Card","tagline":"Spotify-style playlist card","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Spotify-style cards"},{"slug":"social-x-post-card","name":"Social X Post Card","tagline":"X/Twitter-style post card","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"X/Twitter post cards"},{"slug":"sprite-animation","name":"Sprite Animation","tagline":"Sprite sheet animation frame","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Sprite animations"},{"slug":"team-okrs","name":"Team OKRs","tagline":"Team OKR tracking layout","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"OKR tracking"},{"slug":"vfx-text-cursor","name":"VFX Text Cursor","tagline":"VFX text cursor animation","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Text cursor effects"},{"slug":"video-hyperframes","name":"Video Hyperframes","tagline":"Video hyperframe layout","mood":["html-anything"],"formality":"low","scheme":"dark","slide_count":1,"best_for":"Video frames"},{"slug":"waitlist-page","name":"Waitlist Page","tagline":"Product waitlist landing page","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Waitlist pages"},{"slug":"web-proto-brutalist","name":"Web Proto Brutalist","tagline":"Brutalist web prototype","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Brutalist web designs"},{"slug":"web-proto-editorial","name":"Web Proto Editorial","tagline":"Editorial web prototype","mood":["html-anything"],"formality":"high","scheme":"light","slide_count":1,"best_for":"Editorial web designs"},{"slug":"web-proto-soft","name":"Web Proto Soft","tagline":"Soft web prototype","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Soft web designs"},{"slug":"weekly-update","name":"Weekly Update","tagline":"Weekly update newsletter layout","mood":["html-anything"],"formality":"medium","scheme":"light","slide_count":1,"best_for":"Weekly updates"},{"slug":"wireframe-sketch","name":"Wireframe Sketch","tagline":"Wireframe / sketch layout","mood":["html-anything"],"formality":"low","scheme":"light","slide_count":1,"best_for":"Wireframes and sketches"}];
+const SS = {"8-bit-orbit":[1,5,6],"biennale-yellow":[1,5,8],"block-frame":[1,4,8],"blue-professional":[1,6,8],"bold-poster":[1,4,8],"broadside":[1,4,13],"capsule":[1,4,8],"cartesian":[1,4,8],"cobalt-grid":[1,3,5],"coral":[1,4,8],"creative-mode":[1,4,6],"daisy-days":[1,4,8],"editorial-forest":[1,2,5],"editorial-tri-tone":[1,3,4],"emerald-editorial":[1,3,6],"grove":[1,4,8],"long-table":[1,3,7],"mat":[1,4,8],"monochrome":[1,4,12],"neo-grid-bold":[1,3,8],"peoples-platform":[1,4,8],"pin-and-paper":[1,3,11],"pink-script":[1,4,8],"playful":[1,6,8],"raw-grid":[1,4,8],"retro-windows":[1,4,8],"retro-zine":[1,4,8],"sakura-chroma":[1,3,4],"scatterbrain":[1,4,8],"signal":[1,8,18],"soft-editorial":[4,6,10],"stencil-tablet":[1,3,8],"studio":[1,4,8],"vellum":[1,4,8]};
+const ALL = D.concat(HA);
+
+
+/* ========== MOOD CLASSIFIER ========== */
+function moodClass(moods) {
+  var a = (moods||[]).join(' ').toLowerCase();
+  if (/professional|corporate|business|finance|formal|institutional/.test(a)) return 'pr';
+  if (/editorial|literary|atmospheric|narrative|cultural|poster/.test(a)) return 'ed';
+  if (/playful|fun|energetic|geeky|retro|neon|rebellious|pop|fresh/.test(a)) return 'fu';
+  if (/bold|confident|graphic|punchy|dramatic|powerful/.test(a)) return 'bo';
+  if (/warm|friendly|cozy|soft|gentle|organic|inviting|earthy/.test(a)) return 'wa';
+  if (/minimal|clean|simple|restrained|quiet|elegant|refined/.test(a)) return 'cl';
+  return 'ot';
+}
+
+/* ========== IMAGE PATH ========== */
+function imgPath(slug, size) {
+  if (SS[slug]) return 'screenshots/'+slug+'-'+size+'.jpg';
+  return 'ha-screenshots/'+slug+'-'+size+'.jpg';
+}
+
+/* ========== STATE ========== */
+var currentFilter = 'all';
+var currentSource = 'all';
+var currentQuery = '';
+var grid = document.getElementById('grid');
+var countDisplay = document.getElementById('countDisplay');
+var searchInput = document.getElementById('searchInput');
+var modalOverlay = document.getElementById('modalOverlay');
+var modalContent = document.getElementById('modalContent');
+
+/* ========== RENDER ========== */
+function render() {
+  var pool = currentSource === 'beautiful' ? D : currentSource === 'ha' ? HA : ALL;
+  var items = pool.filter(function(t) {
+    if (currentFilter !== 'all' && moodClass(t.mood||[]) !== currentFilter) return false;
+    if (currentQuery) {
+      var q = currentQuery.toLowerCase();
+      if ((t.name||'').toLowerCase().indexOf(q) < 0 &&
+          (t.tagline||'').toLowerCase().indexOf(q) < 0) return false;
+    }
+    return true;
+  });
+
+  countDisplay.textContent = items.length;
+
+  if (items.length === 0) {
+    grid.innerHTML = '<div class="empty">No templates match your filter</div>';
+    return;
+  }
+
+  grid.innerHTML = items.map(function(t) {
+    var mc = moodClass(t.mood||[]);
+    var tagline = (t.tagline||'');
+    var best = (t.best_for||'').substring(0, 60);
+    if (tagline.length > 100) tagline = tagline.substring(0, 100) + '…';
+    return '<div class="card" data-slug="'+t.slug+'" tabindex="0">'
+      + '<div class="card-img"><img src="'+imgPath(t.slug,'1-thumb')+'" alt="" loading="lazy" onerror="this.parentElement.style.display=\'none\'"></div>'
+      + '<div class="card-body">'
+      + '<div class="card-row1"><span class="card-name">'+t.name+'</span><span class="card-slides">'+t.slide_count+' slides</span></div>'
+      + '<div class="card-tagline">'+(t.tagline||'').substring(0,100)+'</div>'
+      + '<div class="card-tags">'
+      + '<span class="'+mc+'">'+t.formality+'</span>'
+      + '<span>'+(t.scheme||'light')+'</span>'
+      + '<span>'+(t.best_for||'').substring(0,28)+'</span>'
+      + '</div></div></div>';
+  }).join('');
+
+  /* Bind click + enter on each card */
+  document.querySelectorAll('.card').forEach(function(c) {
+    c.addEventListener('click', function() { openModal(this.dataset.slug); });
+    c.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(this.dataset.slug); }
+    });
+  });
+}
+
+/* ========== FIND TEMPLATE ========== */
+function findT(slug) {
+  for (var i = 0; i < ALL.length; i++) { if (ALL[i].slug === slug) return ALL[i]; }
+  return null;
+}
+
+/* ========== MODAL ========== */
+function openModal(slug) {
+  var t = findT(slug);
+  if (!t) return;
+
+  var mc = moodClass(t.mood||[]);
+  var moods = (t.mood||[]).map(function(m) { return '<span class="'+moodClass([m])+'">'+m+'</span>'; }).join('');
+  var occs = (t.occasion||[]).map(function(o) { return '<span>'+o+'</span>'; }).join(' ');
+  var best = (t.best_for||'N/A').substring(0, 350);
+  var avoid = t.avoid_for ? (t.avoid_for||'').substring(0, 200) : '';
+
+  var screenshots = '';
+  if (SS[t.slug]) {
+    screenshots = '<div class="modal-scroll-wrap">';
+    SS[t.slug].forEach(function(s, i) {
+      var imgSrc = imgPath(t.slug, s + '-med');
+      screenshots += '<img src="'+imgSrc+'" alt="Slide '+(i+1)+'" loading="lazy" onerror="this.style.display=\'none\'">';
+    });
+    screenshots += '</div>';
+  }
+
+  modalContent.innerHTML = ''
+    + screenshots
+    + '<div class="modal-name">'+t.name+'</div>'
+    + '<div class="modal-tagline">'+(t.tagline||'')+'</div>'
+
+    + (moods ? '<div class="modal-section"><div class="modal-label">Style</div><div class="modal-tags">'+moods+'</div></div>' : '')
+
+    + '<div class="modal-section"><div class="modal-label">Best for</div><div class="modal-best">'+best+'</div></div>'
+
+    + (avoid ? '<div class="modal-section"><div class="modal-label">Avoid for</div><div class="modal-avoid">'+avoid+'</div></div>' : '')
+
+    + (occs ? '<div class="modal-section"><div class="modal-label">Occasions</div><div class="modal-occasions">'+occs+'</div></div>' : '')
+
+    + '<button class="modal-pick" id="pickBtn">\u2713  Pick This Template</button>'
+    + '<div class="modal-copied" id="copiedMsg">Copied! Now paste in chat: <b>use '+t.slug+'</b></div>';
+
+  modalOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  /* Bind pick button */
+  document.getElementById('pickBtn').addEventListener('click', function() {
+    var txt = 'Use the '+t.slug+' template';
+    try { navigator.clipboard.writeText(txt); } catch(e) { }
+    document.getElementById('copiedMsg').classList.add('show');
+  });
+}
+
+function closeModal() {
+  modalOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ========== EVENT BINDING ========== */
+
+/* Category buttons */
+document.getElementById('catGroup').addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-g]');
+  if (!btn) return;
+  this.querySelectorAll('[data-g]').forEach(function(b) { b.classList.remove('on'); });
+  btn.classList.add('on');
+  currentFilter = btn.getAttribute('data-g');
+  render();
+});
+
+/* Source buttons */
+document.getElementById('srcGroup').addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-src]');
+  if (!btn) return;
+  this.querySelectorAll('[data-src]').forEach(function(b) { b.classList.remove('on'); });
+  btn.classList.add('on');
+  currentSource = btn.getAttribute('data-src');
+  render();
+});
+
+/* Search */
+searchInput.addEventListener('input', function() {
+  currentQuery = this.value;
+  render();
+});
+
+/* Modal close */
+modalOverlay.addEventListener('click', function(e) {
+  if (e.target === modalOverlay) closeModal();
+});
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* Keyboard nav on the grid */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    var cards = document.querySelectorAll('.card');
+    var focused = document.activeElement;
+    if (focused && focused.classList.contains('card')) {
+      for (var i = 0; i < cards.length - 1; i++) {
+        if (cards[i] === focused) { cards[i+1].focus(); e.preventDefault(); break; }
+      }
+    } else if (cards.length > 0) {
+      cards[0].focus();
+      e.preventDefault();
+    }
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    var cards = document.querySelectorAll('.card');
+    var focused = document.activeElement;
+    if (focused && focused.classList.contains('card')) {
+      for (var i = 1; i < cards.length; i++) {
+        if (cards[i] === focused) { cards[i-1].focus(); e.preventDefault(); break; }
+      }
+    }
+  }
+});
+
+/* ========== INIT ========== */
+render();
+</script>\n</body>\n</html>
