@@ -565,15 +565,18 @@ function openModal(slug) {
   var best = (t.best_for||'N/A').substring(0, 350);
   var avoid = t.avoid_for ? (t.avoid_for||'').substring(0, 200) : '';
 
-  var screenshots = '';
+  var screenshots = '<div class="modal-scroll-wrap">';
+  /* Always show at least slide 1 */
+  screenshots += '<img src="'+imgPath(t.slug,'1-med')+'" alt="Slide 1" loading="lazy" onerror="this.style.display=\'none\'">';
+  /* Add extra slides for Beautiful templates (have SS entries) */
   if (SS[t.slug]) {
-    screenshots = '<div class="modal-scroll-wrap">';
     SS[t.slug].forEach(function(s, i) {
+      if (i === 0) return; /* already added slide 1 */
       var imgSrc = imgPath(t.slug, s + '-med');
       screenshots += '<img src="'+imgSrc+'" alt="Slide '+(i+1)+'" loading="lazy" onerror="this.style.display=\'none\'">';
     });
-    screenshots += '</div>';
   }
+  screenshots += '</div>';
 
   modalContent.innerHTML = ''
     + screenshots
